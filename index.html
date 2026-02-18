@@ -3,66 +3,96 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Misión: Encuentra el Tesoro</title>
+    <title>8 Meses: Travesía por el Grand Line</title>
     <style>
+        :root {
+            --gold: #f4d03f;
+            --paper: #f5deb3;
+        }
         body { 
-            background: #1a1a1a; 
-            color: #f4d03f; 
+            background: #1a1a1a url('https://www.transparenttextures.com/patterns/old-map.png'); 
+            color: var(--gold); 
             font-family: 'Courier New', Courier, monospace; 
+            margin: 0; 
             display: flex; 
             flex-direction: column; 
             align-items: center; 
-            justify-content: center; 
-            min-height: 100vh; 
-            margin: 0; 
-            overflow-x: hidden; 
-            text-align: center; 
+            min-height: 100vh;
+            text-align: center;
         }
-        
-        .item { 
-            font-size: clamp(3rem, 10vw, 5rem); 
-            cursor: pointer; 
-            transition: transform 0.3s; 
-            margin: 15px; 
-            display: inline-block; 
-            filter: drop-shadow(0 0 10px gold); 
-        }
-        .item.hidden { display: none; }
 
-        #reward-container { 
-            display: none; 
+        /* Secciones */
+        .section {
+            display: none;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            width: 100%;
-            animation: fadeIn 1.5s forwards; 
-            padding: 20px 0;
+            padding: 20px;
+            width: 90%;
+            height: 100vh;
+            animation: fadeIn 0.8s ease-in-out;
         }
 
-        /* Contenedor para las dos imágenes */
+        .active { display: flex; }
+
+        /* Barra de progreso pirata */
+        .progress-container {
+            position: fixed;
+            top: 20px;
+            width: 80%;
+            height: 10px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+            border: 1px solid var(--gold);
+        }
+        #progress-bar {
+            width: 20%;
+            height: 100%;
+            background: var(--gold);
+            box-shadow: 0 0 10px var(--gold);
+            transition: width 0.5s;
+        }
+
+        /* Botones y Objetos */
+        .btn-action {
+            background: #8b4513;
+            color: white;
+            padding: 15px 30px;
+            border: 2px solid var(--gold);
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-family: inherit;
+            margin-top: 20px;
+            transition: 0.3s;
+        }
+        .btn-action:hover { background: #a0522d; transform: scale(1.1); }
+
+        .big-icon { font-size: 6rem; margin: 20px; cursor: pointer; filter: drop-shadow(0 0 15px var(--gold)); }
+        
+        /* Imágenes Finales */
         .poster-group {
             display: flex;
-            flex-wrap: wrap; /* Se ponen una abajo de otra en celulares */
+            flex-wrap: wrap;
             justify-content: center;
-            gap: 20px;
-            width: 95%;
-            margin-top: 10px;
+            gap: 15px;
+            margin-top: 15px;
+        }
+        .poster { 
+            border: 5px solid var(--paper); 
+            box-shadow: 0 0 30px rgba(0,0,0,0.7); 
+            max-width: 350px; 
+            width: 42%;
+            min-width: 260px;
         }
 
-        .poster { 
-            border: 6px solid #f5deb3; 
-            box-shadow: 0 0 20px rgba(244, 208, 63, 0.4); 
-            max-width: 400px; /* Tamaño máximo para que no se vean gigantes */
-            width: 45%;      /* En PC ocupan casi la mitad cada una */
-            min-width: 280px; /* En celular no se hacen diminutas */
-            height: auto;
-            object-fit: contain;
-        }
+        /* Animaciones */
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        
-        h1 { font-size: clamp(1.2rem, 5vw, 2rem); margin: 10px; }
-        #counter { font-size: 1rem; color: #fff; margin-bottom: 10px; }
+        .floating { animation: floating 2s infinite ease-in-out; }
+        @keyframes floating { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
+
+        .berry { position: fixed; top: -50px; font-size: 24px; animation: fall linear forwards; z-index: 1000; }
+        @keyframes fall { to { transform: translateY(110vh) rotate(360deg); } }
     </style>
 </head>
 <body>
@@ -71,36 +101,72 @@
         <source src="https://www.myinstants.com/media/sounds/one-piece-opening-1-we-are-hq.mp3" type="audio/mpeg">
     </audio>
 
-    <div id="game-zone">
-        <h2>¡Encuentra los objetos de la tripulación!</h2>
-        <div id="counter">Objetos encontrados: <span id="count">0</span>/3</div>
-        <div class="item" onclick="collect(this)">🍖</div>
-        <div class="item" onclick="collect(this)">⚔️</div>
-        <div class="item" onclick="collect(this)">🗺️</div>
+    <div class="progress-container">
+        <div id="progress-bar"></div>
     </div>
 
-    <div id="reward-container">
-        <h1>¡NUEVAS RECOMPENSAS DESBLOQUEADAS!</h1>
+    <div class="section active" id="sec1">
+        <h1 class="floating">🌊 ISLA DEL AMANECER</h1>
+        <p>Hace 8 meses zarpamos en esta aventura...</p>
+        <div class="big-icon" onclick="nextStep(2, 40)">⛵</div>
+        <p>Haz clic en el barco para levar anclas</p>
+    </div>
+
+    <div class="section" id="sec2">
+        <h1>⚔️ ISLA JUDICIAL</h1>
+        <p>Hemos superado tormentas y enemigos juntos.</p>
+        <p>¡Derrota las dudas de la Marina!</p>
+        <div class="big-icon" onclick="nextStep(3, 60)">🥊</div>
+        <p>¡Golpea para avanzar!</p>
+    </div>
+
+    <div class="section" id="sec3">
+        <h1>🗺️ ARCHIPIÉLAGO DEL AMOR</h1>
+        <p>Estamos muy cerca del One Piece...</p>
+        <p>Solo un verdadero nakama puede abrir este cofre.</p>
+        <div class="big-icon floating" onclick="finishTravesia()">🎁</div>
+        <p>Haz clic para abrir el cofre final</p>
+    </div>
+
+    <div class="section" id="sec4">
+        <h1>👑 ¡EL ONE PIECE ES REAL! 👑</h1>
         <div class="poster-group">
-            <img src="wanted-poster.png" class="poster" alt="Wanted 1">
-            <img src="wanted-poster-2.png" class="poster" alt="Wanted 2">
+            <img src="wanted-poster.png" class="poster">
+            <img src="wanted-poster-2.png" class="poster">
         </div>
-        <p><i>"Nuestra aventura continúa por el Grand Line"</i></p>
+        <div style="background: rgba(0,0,0,0.7); padding: 15px; border-radius: 10px; margin-top: 10px;">
+            <h2 style="margin:0;">¡FELICES 8 MESES, MI NAKAMA!</h2>
+            <p>Ronaldo, eres mi tesoro más grande en todo el Grand Line.</p>
+        </div>
     </div>
 
     <script>
-        let itemsFound = 0;
-        const totalItems = 3;
-        const music = document.getElementById('pirateMusic');
+        function nextStep(step, progress) {
+            // Ocultar todas las secciones
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            // Mostrar la siguiente
+            document.getElementById('sec' + step).classList.add('active');
+            // Actualizar barra
+            document.getElementById('progress-bar').style.width = progress + '%';
+        }
 
-        function collect(element) {
-            element.classList.add('hidden');
-            itemsFound++;
-            document.getElementById('count').innerText = itemsFound;
-            if (itemsFound === totalItems) {
-                document.getElementById('game-zone').style.display = 'none';
-                document.getElementById('reward-container').style.display = 'flex';
-                music.play().catch(e => console.log("Audio bloqueado"));
+        function finishTravesia() {
+            nextStep(4, 100);
+            const music = document.getElementById('pirateMusic');
+            music.play();
+            startBerries();
+        }
+
+        function startBerries() {
+            for (let i = 0; i < 60; i++) {
+                setTimeout(() => {
+                    const berry = document.createElement('div');
+                    berry.className = 'berry';
+                    berry.innerHTML = Math.random() > 0.5 ? '🪙' : '❤️';
+                    berry.style.left = Math.random() * 100 + 'vw';
+                    berry.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                    document.body.appendChild(berry);
+                }, i * 100);
             }
         }
     </script>
