@@ -2,17 +2,54 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>8 MESES - WANTED</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Misión: Encuentra el Tesoro</title>
     <style>
-        body { background: #1a1a1a; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; margin: 0; font-family: sans-serif; color: #d4af37; }
-        .poster { border: 10px solid #f5deb3; box-shadow: 0 0 30px rgba(0,0,0,0.5); max-width: 90%; animation: zoom 1s ease-out; }
-        @keyframes zoom { from { transform: scale(0); } to { transform: scale(1); } }
-        h1 { margin-top: 20px; letter-spacing: 3px; text-align: center; }
+        body { background: #1a1a1a; color: #f4d03f; font-family: 'Courier New', Courier, monospace; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; margin: 0; overflow: hidden; text-align: center; }
+        
+        /* Estilo de los objetos */
+        .item { font-size: 5rem; cursor: pointer; transition: transform 0.3s; margin: 20px; display: inline-block; filter: drop-shadow(0 0 10px gold); }
+        .item:hover { transform: scale(1.2) rotate(10deg); }
+        .item.hidden { display: none; }
+
+        /* Contenedor del poster (oculto al inicio) */
+        #reward-container { display: none; animation: fadeIn 2s forwards; }
+        .poster { border: 10px solid #f5deb3; box-shadow: 0 0 50px rgba(244, 208, 63, 0.5); max-width: 90%; margin-top: 20px; }
+        
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        
+        h2 { letter-spacing: 2px; text-transform: uppercase; }
+        #counter { font-size: 1.2rem; color: #fff; margin-bottom: 20px; }
     </style>
 </head>
 <body>
-    <h1>¡NUEVA RECOMPENSA!</h1>
-<img src="wanted-poster.png" class="poster" alt="Wanted Ronaldo">
-    <p><i>Felicidades por estos 8 meses, mi pirata favorito.</i></p>
+
+    <div id="game-zone">
+        <h2 id="instruction">¡Encuentra los objetos de la tripulación!</h2>
+        <div id="counter">Objetos encontrados: <span id="count">0</span>/3</div>
+        
+        <div class="item" onclick="collect(this, '🍖')">🍖</div> <div class="item" onclick="collect(this, '⚔️')">⚔️</div> <div class="item" onclick="collect(this, '🗺️')">🗺️</div> </div>
+
+    <div id="reward-container">
+        <h1>¡RECOMPENSA DESBLOQUEADA!</h1>
+        <img src="wanted-poster.png" class="poster" alt="Wanted Ronaldo">
+        <p><i>"8 meses navegando juntos por el Grand Line"</i></p>
+    </div>
+
+    <script>
+        let itemsFound = 0;
+        const totalItems = 3;
+
+        function collect(element, icon) {
+            element.classList.add('hidden');
+            itemsFound++;
+            document.getElementById('count').innerText = itemsFound;
+
+            if (itemsFound === totalItems) {
+                document.getElementById('game-zone').style.display = 'none';
+                document.getElementById('reward-container').style.display = 'block';
+            }
+        }
+    </script>
 </body>
 </html>
