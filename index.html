@@ -5,30 +5,71 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Misión: Encuentra el Tesoro</title>
     <style>
-        body { background: #1a1a1a; color: #f4d03f; font-family: 'Courier New', Courier, monospace; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; margin: 0; overflow: hidden; text-align: center; }
+        body { 
+            background: #1a1a1a; 
+            color: #f4d03f; 
+            font-family: 'Courier New', Courier, monospace; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: center; 
+            height: 100vh; 
+            margin: 0; 
+            overflow: hidden; 
+            text-align: center; 
+        }
         
-        /* Estilo de los objetos */
-        .item { font-size: 5rem; cursor: pointer; transition: transform 0.3s; margin: 20px; display: inline-block; filter: drop-shadow(0 0 10px gold); }
+        .item { 
+            font-size: clamp(3rem, 10vw, 5rem); 
+            cursor: pointer; 
+            transition: transform 0.3s; 
+            margin: 15px; 
+            display: inline-block; 
+            filter: drop-shadow(0 0 10px gold); 
+        }
         .item:hover { transform: scale(1.2) rotate(10deg); }
         .item.hidden { display: none; }
 
-        /* Contenedor del poster (oculto al inicio) */
-        #reward-container { display: none; animation: fadeIn 2s forwards; }
-        .poster { border: 10px solid #f5deb3; box-shadow: 0 0 50px rgba(244, 208, 63, 0.5); max-width: 90%; margin-top: 20px; }
+        #reward-container { 
+            display: none; 
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+            animation: fadeIn 1.5s forwards; 
+        }
+
+        .poster { 
+            border: 8px solid #f5deb3; 
+            box-shadow: 0 0 30px rgba(244, 208, 63, 0.5); 
+            max-width: 85%;  
+            max-height: 65vh; 
+            object-fit: contain; 
+            margin-top: 10px;
+        }
         
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         
-        h2 { letter-spacing: 2px; text-transform: uppercase; }
-        #counter { font-size: 1.2rem; color: #fff; margin-bottom: 20px; }
+        h1 { font-size: clamp(1.2rem, 5vw, 2rem); margin: 10px 0; }
+        h2 { font-size: clamp(1rem, 4vw, 1.5rem); letter-spacing: 2px; }
+        #counter { font-size: 1rem; color: #fff; margin-bottom: 10px; }
     </style>
 </head>
 <body>
+
+    <audio id="pirateMusic">
+        <source src="https://www.myinstants.com/media/sounds/one-piece-opening-1-we-are-hq.mp3" type="audio/mpeg">
+    </audio>
 
     <div id="game-zone">
         <h2 id="instruction">¡Encuentra los objetos de la tripulación!</h2>
         <div id="counter">Objetos encontrados: <span id="count">0</span>/3</div>
         
-        <div class="item" onclick="collect(this, '🍖')">🍖</div> <div class="item" onclick="collect(this, '⚔️')">⚔️</div> <div class="item" onclick="collect(this, '🗺️')">🗺️</div> </div>
+        <div class="item" onclick="collect(this)">🍖</div>
+        <div class="item" onclick="collect(this)">⚔️</div>
+        <div class="item" onclick="collect(this)">🗺️</div>
+    </div>
 
     <div id="reward-container">
         <h1>¡RECOMPENSA DESBLOQUEADA!</h1>
@@ -39,15 +80,22 @@
     <script>
         let itemsFound = 0;
         const totalItems = 3;
+        const music = document.getElementById('pirateMusic');
 
-        function collect(element, icon) {
+        function collect(element) {
             element.classList.add('hidden');
             itemsFound++;
             document.getElementById('count').innerText = itemsFound;
 
             if (itemsFound === totalItems) {
+                // Cambiar vista
                 document.getElementById('game-zone').style.display = 'none';
-                document.getElementById('reward-container').style.display = 'block';
+                document.getElementById('reward-container').style.display = 'flex';
+                
+                // Reproducir música
+                music.play().catch(error => {
+                    console.log("El navegador bloqueó el audio, pero se intentó reproducir.");
+                });
             }
         }
     </script>
